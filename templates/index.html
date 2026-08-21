@@ -14,7 +14,10 @@
         <h1>期货信号看板</h1>
         <p class="muted">只提醒，不自动下单。请在东方财富期货 APP 中人工确认。</p>
       </div>
-      <button id="refresh" type="button">刷新信号</button>
+      <div class="actions">
+        <button id="notify" class="secondary" type="button">启用电脑通知</button>
+        <button id="refresh" type="button">刷新信号</button>
+      </div>
     </header>
     <section class="summary" aria-live="polite">
       <div><span>模式</span><strong id="mode">-</strong></div>
@@ -30,6 +33,23 @@
   </main>
   <script>
     const money = n => n == null ? '-' : Number(n).toLocaleString('zh-CN');
+    const actionable = row => row.direction === '做多' || row.direction === '做空';
+    let firstRender = true;
+    let previousSignals = new Map();
+
+    function signalKey(row) {
+      return [row.direction, row.entry, row.stop, row.suggested_lots, row.status].join('|');
+    }
+
+    function notifySignal(row) {
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+      const notification = new Notification(`中金所杯信号：${row.code} ${row.direction}`, {
+        body: `入场参考 ${money(row.entry)}，止损参考 ${money(row.stop)}，建议 ${row.suggested_lots} 手`,
+        tag: `cffex-${row.code}`,
+      });
+      notification.onclick = () => window.focus();
+    }
+
     function render(data) {
       document.querySelector('#mode').textContent = data.mode;
       document.querySelector('#equity').textContent = money(data.account.futures_equity);
@@ -43,11 +63,28 @@
           <dl><div><dt>最新价</dt><dd>${money(row.last_price)}</dd></div><div><dt>入场参考</dt><dd>${money(row.entry)}</dd></div><div><dt>止损参考</dt><dd>${money(row.stop)}</dd></div></dl>
           <p class="quote-meta">涨跌幅 ${row.change_pct == null ? '-' : row.change_pct + '%'} · 建议手数 ${row.suggested_lots} · 5分钟采样</p>
         </article>`).join('');
+      const nextSignals = new Map();
+      data.contracts.forEach(row => {
+        if (!actionable(row)) return;
+        const key = signalKey(row);
+        nextSignals.set(row.code, key);
+        if (!firstRender && previousSignals.get(row.code) !== key) notifySignal(row);
+      });
+      previousSignals = nextSignals;
+      firstRender = false;
     }
+
     async function refresh() { render(await (await fetch('/api/snapshot')).json()); }
+
+    document.querySelector('#notify').addEventListener('click', async () => {
+      const button = document.querySelector('#notify');
+      if (!('Notification' in window)) { button.textContent = '浏览器不支持通知'; return; }
+      const permission = await Notification.requestPermission();
+      button.textContent = permission === 'granted' ? '电脑通知已启用' : '通知权限未开启';
+    });
     document.querySelector('#refresh').addEventListener('click', refresh);
     refresh();
-    setInterval(refresh, 30000);
+    setInterval(refresh, 25000);
   </script>
 </body>
 </html>
