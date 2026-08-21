@@ -13,6 +13,6 @@ button { border: 1px solid #6fcf97; background: #163a2b; color: #dff7e8; border-
 .section-title { display:flex; justify-content:space-between; align-items: baseline; gap:12px; margin: 10px 0 14px; }
 .grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
 .contract { padding: 16px; } .contract-head { display:flex; justify-content:space-between; gap:8px; } .contract-head b { font-size:20px; margin-right:8px; } .contract-head span { color:#9aa7b4; font-size:13px; } em { color:#f0b67b; font-size:12px; font-style:normal; }
-.direction { font-size:28px; font-weight:600; padding:24px 0 16px; color:#9aa7b4; } dl { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:0; } dd { margin:5px 0 0; font-size:16px; }
+.direction { font-size:28px; font-weight:600; padding:24px 0 16px; color:#9aa7b4; } dl { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:0; } dd { margin:5px 0 0; font-size:16px; } .quote-meta { margin:16px 0 0; color:#9aa7b4; font-size:12px; }
 .notice { border-left:3px solid #f0b67b; margin-top:20px; padding:10px 12px; color:#d7dee6; background:#1d2933; font-size:13px; }
 @media (max-width: 620px) { main { padding:20px 14px 34px; } header { align-items: start; flex-direction: column; } button { width:100%; } .summary { grid-template-columns: repeat(2, 1fr); } .grid { grid-template-columns:1fr; } .section-title { align-items:start; flex-direction:column; } }
