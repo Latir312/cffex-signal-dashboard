@@ -40,8 +40,8 @@
         <article class="contract">
           <div class="contract-head"><div><b>${row.code}</b><span>${row.name}</span></div><em>${row.status}</em></div>
           <div class="direction">${row.direction}</div>
-          <dl><div><dt>最新价</dt><dd>${money(row.last_price)}</dd></div><div><dt>今日开盘</dt><dd>${money(row.open)}</dd></div><div><dt>日内区间</dt><dd>${money(row.low)} - ${money(row.high)}</dd></div></dl>
-          <p class="quote-meta">涨跌幅 ${row.change_pct == null ? '-' : row.change_pct + '%'} · 建议手数 ${row.suggested_lots}</p>
+          <dl><div><dt>最新价</dt><dd>${money(row.last_price)}</dd></div><div><dt>入场参考</dt><dd>${money(row.entry)}</dd></div><div><dt>止损参考</dt><dd>${money(row.stop)}</dd></div></dl>
+          <p class="quote-meta">涨跌幅 ${row.change_pct == null ? '-' : row.change_pct + '%'} · 建议手数 ${row.suggested_lots} · 5分钟采样</p>
         </article>`).join('');
     }
     async function refresh() { render(await (await fetch('/api/snapshot')).json()); }
