@@ -1,0 +1,18 @@
+:root { color-scheme: dark; font-family: "Segoe UI", "Microsoft YaHei", sans-serif; background: #0f1720; color: #edf2f7; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #0f1720; }
+main { max-width: 980px; margin: 0 auto; padding: 28px 18px 48px; }
+header { display: flex; justify-content: space-between; gap: 24px; align-items: end; border-bottom: 1px solid #2b3744; padding-bottom: 22px; }
+.eyebrow { color: #6fcf97; font-size: 12px; letter-spacing: 1.5px; margin: 0 0 8px; }
+h1, h2, p { margin-top: 0; } h1 { font-size: clamp(26px, 5vw, 40px); margin-bottom: 8px; } h2 { font-size: 19px; margin-bottom: 0; }
+.muted, .section-title span { color: #9aa7b4; font-size: 13px; }
+button { border: 1px solid #6fcf97; background: #163a2b; color: #dff7e8; border-radius: 6px; padding: 10px 14px; cursor: pointer; }
+.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 20px 0; }
+.summary div, .contract { border: 1px solid #2b3744; background: #151f29; border-radius: 7px; }
+.summary div { padding: 14px; } .summary span, dt { display:block; color:#9aa7b4; font-size:12px; } .summary strong { display:block; margin-top:8px; }
+.section-title { display:flex; justify-content:space-between; align-items: baseline; gap:12px; margin: 10px 0 14px; }
+.grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; }
+.contract { padding: 16px; } .contract-head { display:flex; justify-content:space-between; gap:8px; } .contract-head b { font-size:20px; margin-right:8px; } .contract-head span { color:#9aa7b4; font-size:13px; } em { color:#f0b67b; font-size:12px; font-style:normal; }
+.direction { font-size:28px; font-weight:600; padding:24px 0 16px; color:#9aa7b4; } dl { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin:0; } dd { margin:5px 0 0; font-size:16px; }
+.notice { border-left:3px solid #f0b67b; margin-top:20px; padding:10px 12px; color:#d7dee6; background:#1d2933; font-size:13px; }
+@media (max-width: 620px) { main { padding:20px 14px 34px; } header { align-items: start; flex-direction: column; } button { width:100%; } .summary { grid-template-columns: repeat(2, 1fr); } .grid { grid-template-columns:1fr; } .section-title { align-items:start; flex-direction:column; } }

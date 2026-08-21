@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>中金所杯信号看板</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <p class="eyebrow">CFFEX CUP / SIGNAL ONLY</p>
+        <h1>期货信号看板</h1>
+        <p class="muted">只提醒，不自动下单。请在东方财富期货 APP 中人工确认。</p>
+      </div>
+      <button id="refresh" type="button">刷新信号</button>
+    </header>
+    <section class="summary" aria-live="polite">
+      <div><span>模式</span><strong id="mode">-</strong></div>
+      <div><span>期货账户</span><strong id="equity">-</strong></div>
+      <div><span>保证金上限</span><strong id="cap">-</strong></div>
+      <div><span>更新时间</span><strong id="updated">-</strong></div>
+    </section>
+    <section>
+      <div class="section-title"><h2>股指期货</h2><span>14:45 后不再开新仓，14:55 前平仓</span></div>
+      <div id="contracts" class="grid"></div>
+    </section>
+    <p id="notice" class="notice"></p>
+  </main>
+  <script>
+    const money = n => n == null ? '-' : Number(n).toLocaleString('zh-CN');
+    function render(data) {
+      document.querySelector('#mode').textContent = data.mode;
+      document.querySelector('#equity').textContent = money(data.account.futures_equity);
+      document.querySelector('#cap').textContent = `${data.account.margin_cap * 100}%`;
+      document.querySelector('#updated').textContent = data.updated_at;
+      document.querySelector('#notice').textContent = data.notice;
+      document.querySelector('#contracts').innerHTML = data.contracts.map(row => `
+        <article class="contract">
+          <div class="contract-head"><div><b>${row.code}</b><span>${row.name}</span></div><em>${row.status}</em></div>
+          <div class="direction">${row.direction}</div>
+          <dl><div><dt>建议手数</dt><dd>${row.suggested_lots}</dd></div><div><dt>入场</dt><dd>${money(row.entry)}</dd></div><div><dt>止损</dt><dd>${money(row.stop)}</dd></div></dl>
+        </article>`).join('');
+    }
+    async function refresh() { render(await (await fetch('/api/snapshot')).json()); }
+    document.querySelector('#refresh').addEventListener('click', refresh);
+    refresh();
+    setInterval(refresh, 30000);
+  </script>
+</body>
+</html>
